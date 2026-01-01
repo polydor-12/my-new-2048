@@ -24,10 +24,9 @@ export class Score {
     this.set(0);
   }
 
-  updateCurrentScore(level: number): void {
+  updateCurrentScore(level: number, score_pop = true): void {
     this.currentScoreText.innerText = this.currentScore.toString();
-    console.log("Current this.currentScoreBoard:", this.currentScoreBoard); // Debug log
-    this.currentScoreBoard.classList.add("score_pop");
+    if (score_pop) this.currentScoreBoard.classList.add("score_pop");
     setTimeout(() => {
       this.currentScoreBoard.classList.remove("score_pop");
     }, 300);
@@ -88,7 +87,7 @@ export class Score {
   set(score: number): void {
     this.currentScore += score;
     if (score >= this.level) this.level = score;
-    this.updateCurrentScore(this.level);
+    this.updateCurrentScore(this.level, score > 0);
     if (this.currentScore > this.bestScore) {
       this.bestScore = this.currentScore;
       this.updateBestScore();
