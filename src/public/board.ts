@@ -82,12 +82,17 @@ export class Board {
     }
   }
 
-  removeAdded(myCells: Cell[]): void {
-    Object.values(myCells).forEach((cell) => {
-      cell.added = false;
-      cell.pulse = false;
-      cell.comeOut = false;
-    });
+  removeAdded(myCells: Cells = this.cells): void {
+    for (let y = 0; y < 4; y++) {
+      for (let x = 0; x < 4; x++) {
+        myCells[x + "-" + y].added = false;
+        const cellDiv = document.getElementById(x + "-" + y);
+        if (cellDiv) {
+          cellDiv.classList.remove("pulse");
+          cellDiv.classList.remove("come-out");
+        }
+      }
+    }
   }
 
   makeBoardFrame(): void {
@@ -117,7 +122,8 @@ export class Board {
 
   moveLeft(myCells: Cells = this.cells): boolean {
     let moved = false;
-    const addedCells: Cell[] = [];
+    let addedScore = 0;
+    this.removeAdded();
     for (let y = 0; y < 4; y++) {
       for (let loop = 1; loop < 4; loop++) {
         for (let x = 1; x < 4; x++) {
@@ -126,30 +132,29 @@ export class Board {
             myCells[x + "-" + y].value === 0
           )
             continue;
-          if (myCells[x - 1 + "-" + y].value === myCells[x + "-" + y].value) {
-            myCells[x - 1 + "-" + y].set(
-              myCells[x - 1 + "-" + y].value * 2,
-              "pulse"
+          if (
+            myCells[x - 1 + "-" + y].value === myCells[x + "-" + y].value &&
+            !myCells[x + "-" + y].added
+          ) {
+            addedScore += myCells[x - 1 + "-" + y].doubleUp(
+              myCells[x + "-" + y]
             );
-            myCells[x - 1 + "-" + y].added = true;
-            addedCells.push(myCells[x - 1 + "-" + y]);
-            myCells[x + "-" + y].set(0);
             moved = true;
           } else if (myCells[x - 1 + "-" + y].value === 0) {
-            myCells[x - 1 + "-" + y].set(myCells[x + "-" + y].value);
-            myCells[x + "-" + y].set(0);
+            myCells[x - 1 + "-" + y].moveFrom(myCells[x + "-" + y]);
             moved = true;
           }
         }
       }
     }
-    this.removeAdded(addedCells);
+    this.score.set(addedScore);
     return moved;
   }
 
   moveRight(myCells: Cells = this.cells): boolean {
     let moved = false;
-    const addedCells: Cell[] = [];
+    let addedScore = 0;
+    this.removeAdded();
     for (let y = 0; y < 4; y++) {
       for (let loop = 1; loop < 4; loop++) {
         for (let x = 2; x >= 0; x--) {
@@ -158,30 +163,29 @@ export class Board {
             myCells[x + "-" + y].value === 0
           )
             continue;
-          if (myCells[x + 1 + "-" + y].value === myCells[x + "-" + y].value) {
-            myCells[x + 1 + "-" + y].set(
-              myCells[x + 1 + "-" + y].value * 2,
-              "pulse"
+          if (
+            myCells[x + 1 + "-" + y].value === myCells[x + "-" + y].value &&
+            !myCells[x + "-" + y].added
+          ) {
+            addedScore += myCells[x + 1 + "-" + y].doubleUp(
+              myCells[x + "-" + y]
             );
-            myCells[x + 1 + "-" + y].added = true;
-            addedCells.push(myCells[x + 1 + "-" + y]);
-            myCells[x + "-" + y].set(0);
             moved = true;
           } else if (myCells[x + 1 + "-" + y].value === 0) {
-            myCells[x + 1 + "-" + y].set(myCells[x + "-" + y].value);
-            myCells[x + "-" + y].set(0);
+            myCells[x + 1 + "-" + y].moveFrom(myCells[x + "-" + y]);
             moved = true;
           }
         }
       }
     }
-    this.removeAdded(addedCells);
+    this.score.set(addedScore);
     return moved;
   }
 
   moveUp(myCells: Cells = this.cells): boolean {
     let moved = false;
-    const addedCells: Cell[] = [];
+    let addedScore = 0;
+    this.removeAdded();
     for (let x = 0; x < 4; x++) {
       for (let loop = 1; loop < 4; loop++) {
         for (let y = 1; y < 4; y++) {
@@ -190,29 +194,28 @@ export class Board {
             myCells[x + "-" + y].value === 0
           )
             continue;
-          if (myCells[x + "-" + (y - 1)].value === myCells[x + "-" + y].value) {
-            myCells[x + "-" + (y - 1)].set(
-              myCells[x + "-" + (y - 1)].value * 2,
-              "pulse"
+          if (
+            myCells[x + "-" + (y - 1)].value === myCells[x + "-" + y].value &&
+            !myCells[x + "-" + y].added
+          ) {
+            addedScore += myCells[x + "-" + (y - 1)].doubleUp(
+              myCells[x + "-" + y]
             );
-            myCells[x + "-" + (y - 1)].added = true;
-            addedCells.push(myCells[x + "-" + (y - 1)]);
-            myCells[x + "-" + y].set(0);
             moved = true;
           } else if (myCells[x + "-" + (y - 1)].value === 0) {
-            myCells[x + "-" + (y - 1)].set(myCells[x + "-" + y].value);
-            myCells[x + "-" + y].set(0);
+            myCells[x + "-" + (y - 1)].moveFrom(myCells[x + "-" + y]);
             moved = true;
           }
         }
       }
     }
-    this.removeAdded(addedCells);
+    this.score.set(addedScore);
     return moved;
   }
   moveDown(myCells: Cells = this.cells): boolean {
     let moved = false;
-    const addedCells: Cell[] = [];
+    let addedScore = 0;
+    this.removeAdded();
     for (let x = 0; x < 4; x++) {
       for (let loop = 1; loop < 4; loop++) {
         for (let y = 2; y >= 0; y--) {
@@ -221,24 +224,22 @@ export class Board {
             myCells[x + "-" + y].value === 0
           )
             continue;
-          if (myCells[x + "-" + (y + 1)].value === myCells[x + "-" + y].value) {
-            myCells[x + "-" + (y + 1)].set(
-              myCells[x + "-" + (y + 1)].value * 2,
-              "pulse"
+          if (
+            myCells[x + "-" + (y + 1)].value === myCells[x + "-" + y].value &&
+            !myCells[x + "-" + y].added
+          ) {
+            addedScore += myCells[x + "-" + (y + 1)].doubleUp(
+              myCells[x + "-" + y]
             );
-            myCells[x + "-" + (y + 1)].added = true;
-            addedCells.push(myCells[x + "-" + (y + 1)]);
-            myCells[x + "-" + y].set(0);
             moved = true;
           } else if (myCells[x + "-" + (y + 1)].value === 0) {
-            myCells[x + "-" + (y + 1)].set(myCells[x + "-" + y].value);
-            myCells[x + "-" + y].set(0);
+            myCells[x + "-" + (y + 1)].moveFrom(myCells[x + "-" + y]);
             moved = true;
           }
         }
       }
     }
-    this.removeAdded(addedCells);
+    this.score.set(addedScore);
     return moved;
   }
 }

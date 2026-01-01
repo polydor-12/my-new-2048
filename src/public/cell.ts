@@ -46,20 +46,16 @@ export class Cell {
     this.set(value);
   }
 
-  rowInsideReload(animation: string = ""): void {
-    console.log("Cell reload:", this.place, this.value);
+  cellReload(animation: string = ""): void {
     const cellDiv = document.getElementById(this.place);
     if (cellDiv) {
-      if (animation !== "") cellDiv.classList.remove(animation);
       cellDiv.style.backgroundColor = this.bgColor;
       cellDiv.style.color = this.textColor;
-      if (animation !== "") cellDiv.classList.add(animation);
       cellDiv.innerHTML = `<div ${
         this.textStyle == "" ? "" : `style="transform: ${this.textStyle};"`
       }>${this.viewString}</div>`;
+      if (animation !== "") cellDiv.classList.add(animation);
     }
-    this.pulse = false;
-    this.comeOut = false;
   }
   set(
     num: number,
@@ -86,7 +82,18 @@ export class Cell {
         : 1024 == this.value
         ? "translateX(-0.3rem) scaleX(0.53)"
         : "translateX(-0.26rem) scaleX(0.53)";
-    this.rowInsideReload(animation);
+    this.cellReload(animation);
+  }
+  moveFrom(this: Cell, blankCell: Cell) {
+    this.set(blankCell.value);
+    this.added = blankCell.added;
+    blankCell.set(0);
+  }
+  doubleUp(this: Cell, blankCell: Cell) {
+    this.set(this.value * 2, "pulse");
+    this.added = true;
+    blankCell.set(0);
+    return this.value;
   }
 }
 
