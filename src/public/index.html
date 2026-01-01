@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>new-2048</title>
+  </head>
+  <body>
+    <body>
+      <div id="main" style="background-color: rgb(250, 248, 239)">
+        <div id="myHeader">
+          <div id="firstRow">
+            <div id="gameTitle">2048</div>
+            <div id="scoreBoard" class="">
+              <span class="text">SCORE</span><br />
+              <span class="scores" id="current-score">0</span>
+            </div>
+            <div id="bestscoreBoard" class="">
+              <span class="text">BEST SCORE</span> <br />
+              <span class="scores" id="best-score">1000</span>
+            </div>
+          </div>
+          <div id="secondRow">
+            <div id="secondRowText">2048까지 도전하세요!</div>
+            <div id="secondRowNewGame">New Game</div>
+          </div>
+        </div>
+        <div id="board">
+          <div class="column">
+            <div class="row">
+              <div
+                id="0-0"
+                class="row-inside"
+                style="
+                  background-color: rgb(205, 193, 180);
+                  color: rgb(143, 122, 102);
+                "
+              >
+                <div></div>
+              </div>
+            </div>
+            <div class="row">
+              <div
+                id="1-0"
+                class="row-inside"
+                style="
+                  background-color: rgb(205, 193, 180);
+                  color: rgb(143, 122, 102);
+                "
+              >
+                <div></div>
+              </div>
+            </div>
+            <div class="row">
+              <div
+                id="2-0"
+                class="row-inside"
+                style="
+                  background-color: rgb(205, 193, 180);
+                  color: rgb(143, 122, 102);
+                "
+              >
+                <div></div>
+              </div>
+            </div>
+            <div class="row">
+              <div
+                id="3-0"
+                class="row-inside"
+                style="
+                  background-color: rgb(205, 193, 180);
+                  color: rgb(143, 122, 102);
+                "
+              >
+                <div></div>
+              </div>
+            </div>
+          </div>
+          <div class="column">
+            <div class="row">
+              <div
+                id="0-1"
+                class="row-inside"
+                style="
+                  background-color: rgb(205, 193, 180);
+                  color: rgb(143, 122, 102);
+                "
+              >
+                <div></div>
+              </div>
+            </div>
+            <div class="row">
+              <div
+                id="1-1"
+                class="row-inside"
+                style="
+                  background-color: rgb(205, 193, 180);
+                  color: rgb(143, 122, 102);
+                "
+              >
+                <div></div>
+              </div>
+            </div>
+            <div class="row">
+              <div
+                id="2-1"
+                class="row-inside"
+                style="
+                  background-color: rgb(205, 193, 180);
+                  color: rgb(143, 122, 102);
+                "
+              >
+                <div></div>
+              </div>
+            </div>
+            <div class="row">
+              <div
+                id="3-1"
+                class="row-inside"
+                style="
+                  background-color: rgb(205, 193, 180);
+                  color: rgb(143, 122, 102);
+                "
+              >
+                <div></div>
+              </div>
+            </div>
+          </div>
+          <div class="column">
+            <div class="row">
+              <div
+                id="0-2"
+                class="row-inside"
+                style="
+                  background-color: rgb(205, 193, 180);
+                  color: rgb(143, 122, 102);
+                "
+              >
+                <div></div>
+              </div>
+            </div>
+            <div class="row">
+              <div
+                id="1-2"
+                class="row-inside"
+                style="
+                  background-color: rgb(205, 193, 180);
+                  color: rgb(143, 122, 102);
+                "
+              >
+                <div></div>
+              </div>
+            </div>
+            <div class="row">
+              <div
+                id="2-2"
+                class="row-inside"
+                style="
+                  background-color: rgb(205, 193, 180);
+                  color: rgb(143, 122, 102);
+                "
+              >
+                <div></div>
+              </div>
+            </div>
+            <div class="row">
+              <div
+                id="3-2"
+                class="row-inside"
+                style="
+                  background-color: rgb(205, 193, 180);
+                  color: rgb(143, 122, 102);
+                "
+              >
+                <div></div>
+              </div>
+            </div>
+          </div>
+          <div class="column">
+            <div class="row">
+              <div
+                id="0-3"
+                class="row-inside"
+                style="
+                  background-color: rgb(205, 193, 180);
+                  color: rgb(143, 122, 102);
+                "
+              >
+                <div></div>
+              </div>
+            </div>
+            <div class="row">
+              <div
+                id="1-3"
+                class="row-inside"
+                style="
+                  background-color: rgb(205, 193, 180);
+                  color: rgb(143, 122, 102);
+                "
+              >
+                <div></div>
+              </div>
+            </div>
+            <div class="row">
+              <div
+                id="2-3"
+                class="row-inside"
+                style="
+                  background-color: rgb(205, 193, 180);
+                  color: rgb(143, 122, 102);
+                "
+              >
+                <div></div>
+              </div>
+            </div>
+            <div class="row">
+              <div
+                id="3-3"
+                class="row-inside"
+                style="
+                  background-color: rgb(205, 193, 180);
+                  color: rgb(143, 122, 102);
+                "
+              >
+                <div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <script type="module" src="main.ts"></script>
+    </body>
+  </body>
+</html>

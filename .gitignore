@@ -1,0 +1,14 @@
+node_modules
+# Keep environment variables out of version control
+*.jpeg
+*.xlsx
+*.xls
+*.hwp
+*.pdf
+*.hwpx
+*.hwp
+*.csv
+*.zip
+*.png
+*.sql
+
