@@ -96,5 +96,3 @@ export class Cell {
     return this.value;
   }
 }
-
-// 2048 게임 보드의 구성인 cells에서 화살표 위, 아래, 왼쪽, 오른쪽 이동 기능을 구현합니다.
