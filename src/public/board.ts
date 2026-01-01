@@ -1,11 +1,13 @@
 import { Cell } from "./cell";
 import { Score } from "./score";
+import { delay } from "./util";
 
 export interface Cells {
   [key: string]: Cell;
 }
 
 export class Board {
+  delayTime: number = 30;
   cells: Cells = {};
   gameOver: boolean = false;
   score: Score;
@@ -13,18 +15,25 @@ export class Board {
   constructor() {
     this.cells = {};
     this.score = new Score();
-    // this.makeBoardFrame();
+    this.score.loadScores();
     this.loadCells(this.cells);
   }
 
   // score 관련 메서드
 
-  addScore(value: number, myCells: Cells = this.cells): void {
-    this.score.set(value);
-    this.saveCells(myCells);
+  addScore(addedScore: number, myCells: Cells = this.cells): void {
+    this.score.set(addedScore);
+    this.saveCells();
   }
 
   // cell 관련 메서드
+
+  resetBoard(): void {
+    this.cells = {};
+    this.gameOver = false;
+    this.score.resetScore();
+    this.initCells(this.cells);
+  }
 
   initCells(myCells: Cells = this.cells): void {
     for (let y = 0; y < 4; y++) {
@@ -120,13 +129,13 @@ export class Board {
 
   // cell 이동 메서드들
 
-  moveLeft(myCells: Cells = this.cells): boolean {
+  async moveLeft(myCells: Cells = this.cells): Promise<boolean> {
     let moved = false;
     let addedScore = 0;
     this.removeAdded();
-    for (let y = 0; y < 4; y++) {
-      for (let loop = 1; loop < 4; loop++) {
-        for (let x = 1; x < 4; x++) {
+    for (let loop = 1; loop < 4; loop++) {
+      for (let x = 1; x < 4; x++) {
+        for (let y = 0; y < 4; y++) {
           if (
             myCells[x - 1 + "-" + y].added ||
             myCells[x + "-" + y].value === 0
@@ -146,18 +155,18 @@ export class Board {
           }
         }
       }
+      await delay(this.delayTime);
     }
-    this.score.set(addedScore);
+    this.addScore(addedScore);
     return moved;
   }
-
-  moveRight(myCells: Cells = this.cells): boolean {
+  async moveRight(myCells: Cells = this.cells): Promise<boolean> {
     let moved = false;
     let addedScore = 0;
     this.removeAdded();
-    for (let y = 0; y < 4; y++) {
-      for (let loop = 1; loop < 4; loop++) {
-        for (let x = 2; x >= 0; x--) {
+    for (let loop = 1; loop < 4; loop++) {
+      for (let x = 2; x >= 0; x--) {
+        for (let y = 0; y < 4; y++) {
           if (
             myCells[x + 1 + "-" + y].added ||
             myCells[x + "-" + y].value === 0
@@ -177,18 +186,18 @@ export class Board {
           }
         }
       }
+      await delay(this.delayTime);
     }
-    this.score.set(addedScore);
+    this.addScore(addedScore);
     return moved;
   }
-
-  moveUp(myCells: Cells = this.cells): boolean {
+  async moveUp(myCells: Cells = this.cells): Promise<boolean> {
     let moved = false;
     let addedScore = 0;
     this.removeAdded();
-    for (let x = 0; x < 4; x++) {
-      for (let loop = 1; loop < 4; loop++) {
-        for (let y = 1; y < 4; y++) {
+    for (let loop = 1; loop < 4; loop++) {
+      for (let y = 1; y < 4; y++) {
+        for (let x = 0; x < 4; x++) {
           if (
             myCells[x + "-" + (y - 1)].added ||
             myCells[x + "-" + y].value === 0
@@ -208,17 +217,18 @@ export class Board {
           }
         }
       }
+      await delay(this.delayTime);
     }
-    this.score.set(addedScore);
+    this.addScore(addedScore);
     return moved;
   }
-  moveDown(myCells: Cells = this.cells): boolean {
+  async moveDown(myCells: Cells = this.cells): Promise<boolean> {
     let moved = false;
     let addedScore = 0;
     this.removeAdded();
-    for (let x = 0; x < 4; x++) {
-      for (let loop = 1; loop < 4; loop++) {
-        for (let y = 2; y >= 0; y--) {
+    for (let loop = 1; loop < 4; loop++) {
+      for (let y = 2; y >= 0; y--) {
+        for (let x = 0; x < 4; x++) {
           if (
             myCells[x + "-" + (y + 1)].added ||
             myCells[x + "-" + y].value === 0
@@ -238,8 +248,9 @@ export class Board {
           }
         }
       }
+      await delay(this.delayTime);
     }
-    this.score.set(addedScore);
+    this.addScore(addedScore);
     return moved;
   }
 }

@@ -19,21 +19,37 @@ export class Score {
   constructor() {
     this.currentScore = 0;
     this.bestScore = 0;
-    this.loadBestScore();
-    this.level = 0;
+    this.loadScores();
+    this.showScoreBoard();
+    this.level = this.currentScore;
     this.set(0);
   }
 
-  updateCurrentScore(level: number, score_pop = true): void {
-    this.currentScoreText.innerText = this.currentScore.toString();
-    if (score_pop) this.currentScoreBoard.classList.add("score_pop");
-    setTimeout(() => {
-      this.currentScoreBoard.classList.remove("score_pop");
-    }, 300);
-    let mainBgcolor = "#faf8ef";
-    let goalNumber = "2048까지 도전하세요!";
+  updateScoreBoard(score: number): void {
+    if (score > 0) {
+      this.currentScore += score;
+      if (this.currentScore > this.level) this.level = this.currentScore;
+      this.currentScoreText.innerText = this.currentScore.toString();
+      this.currentScoreBoard.classList.add("score_pop");
+      setTimeout(() => {
+        this.currentScoreBoard.classList.remove("score_pop");
+      }, 300);
+      if (this.currentScore > this.bestScore) {
+        this.bestScore = this.currentScore;
+        this.bestScoreText.innerText = this.bestScore.toString();
+        this.bestScoreBoard.classList.add("score_pop");
+        setTimeout(() => {
+          this.bestScoreBoard.classList.remove("score_pop");
+        }, 300);
+      }
+    }
 
-    switch (level) {
+    this.saveScores();
+    // 배경색 변경 및 레벨 텍스트 업데이트
+    let mainBgcolor;
+    let goalNumber;
+
+    switch (this.level) {
       case 0:
         mainBgcolor = "#faf8ef";
         goalNumber = "2048까지 도전하세요!";
@@ -62,42 +78,37 @@ export class Score {
     }
   }
 
-  updateBestScore(): void {
-    this.saveBestScore();
-    this.bestScoreText.innerText = this.bestScore.toString();
-    this.bestScoreBoard.classList.add("score_pop");
-    setTimeout(() => {
-      this.bestScoreBoard.classList.remove("score_pop");
-    }, 300);
-  }
-
   // Methods this.bestScore와 myCells의 내용을 브라우저에 저장하는 함수와 불러오는 함수
-  saveBestScore(): void {
+  saveScores(): void {
     localStorage.setItem("bestScore", this.bestScore.toString());
+    localStorage.setItem("currentScore", this.currentScore.toString());
   }
 
-  loadBestScore(): number {
+  loadScores(): void {
     const savedBestScore = localStorage.getItem("bestScore");
+    const savedCurrentScore = localStorage.getItem("currentScore");
     if (savedBestScore) {
-      return parseInt(savedBestScore, 10);
+      this.bestScore = parseInt(savedBestScore, 10);
     }
-    return 0;
+    if (savedCurrentScore) {
+      this.currentScore = parseInt(savedCurrentScore, 10);
+    }
   }
 
   set(score: number): void {
-    this.currentScore += score;
-    if (score >= this.level) this.level = score;
-    this.updateCurrentScore(this.level, score > 0);
-    if (this.currentScore > this.bestScore) {
-      this.bestScore = this.currentScore;
-      this.updateBestScore();
-    }
+    this.updateScoreBoard(score);
   }
 
-  reset(): void {
+  showScoreBoard(): void {
+    this.currentScoreText.innerText = this.currentScore.toString();
+    this.bestScoreText.innerText = this.bestScore.toString();
+  }
+
+  resetScore(): void {
+    this.loadScores();
     this.currentScore = 0;
-    this.loadBestScore();
     this.level = 0;
-    this.updateCurrentScore(0);
+    this.showScoreBoard();
+    this.updateScoreBoard(0);
   }
 }

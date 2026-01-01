@@ -53,20 +53,20 @@ adjustLayout();
 window.addEventListener("resize", adjustLayout);
 
 // Add keyboard event listener for game controls
-document.addEventListener("keydown", (event) => {
+document.addEventListener("keydown", async (event) => {
   let moved = false;
   switch (event.key) {
     case "ArrowUp":
-      moved = board.moveUp();
+      moved = await board.moveUp();
       break;
     case "ArrowDown":
-      moved = board.moveDown();
+      moved = await board.moveDown();
       break;
     case "ArrowLeft":
-      moved = board.moveLeft();
+      moved = await board.moveLeft();
       break;
     case "ArrowRight":
-      moved = board.moveRight();
+      moved = await board.moveRight();
       break;
   }
 
@@ -84,7 +84,7 @@ if (boardElement) {
   let endY = 0;
   let isDragging = false;
 
-  const handleGesture = () => {
+  const handleGesture = async () => {
     const diffX = endX - startX;
     const diffY = endY - startY;
     const threshold = 50; // Minimum distance in pixels to trigger a move
@@ -95,18 +95,18 @@ if (boardElement) {
       // Horizontal swipe
       if (Math.abs(diffX) > threshold) {
         if (diffX > 0) {
-          moved = board.moveRight();
+          moved = await board.moveRight();
         } else {
-          moved = board.moveLeft();
+          moved = await board.moveLeft();
         }
       }
     } else {
       // Vertical swipe
       if (Math.abs(diffY) > threshold) {
         if (diffY > 0) {
-          moved = board.moveDown();
+          moved = await board.moveDown();
         } else {
-          moved = board.moveUp();
+          moved = await board.moveUp();
         }
       }
     }
@@ -156,5 +156,15 @@ if (boardElement) {
       endY = e.clientY;
       handleGesture();
     }
+  });
+}
+
+const newGameDiv = document.getElementById("secondRowNewGame");
+if (newGameDiv) {
+  newGameDiv.addEventListener("click", () => {
+    board.resetBoard();
+  });
+  newGameDiv.addEventListener("touchstart", (event: TouchEvent) => {
+    board.resetBoard();
   });
 }
