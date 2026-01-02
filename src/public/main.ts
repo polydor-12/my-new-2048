@@ -22,7 +22,11 @@ console.log("main.ts loaded");
 const board = new Board();
 
 function isMobile() {
-  return 'ontouchstart' in window || navigator.maxTouchPoints > 0 || window.innerWidth < 768;
+  return (
+    "ontouchstart" in window ||
+    navigator.maxTouchPoints > 0 ||
+    window.innerWidth < 768
+  );
 }
 
 function adjustLayout() {
@@ -35,8 +39,12 @@ function adjustLayout() {
   const gameWidthRem = 9.8;
   const gameHeightRem = 13.7; // Rounded
 
-  const viewportWidth = window.visualViewport ? window.visualViewport.width : window.innerWidth;
-  const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+  const viewportWidth = window.visualViewport
+    ? window.visualViewport.width
+    : window.innerWidth;
+  const viewportHeight = window.visualViewport
+    ? window.visualViewport.height
+    : window.innerHeight;
 
   // Calculate the font size that would make the game fit the viewport width
   const fontSizeForWidth = viewportWidth / gameWidthRem;
@@ -97,7 +105,7 @@ if (boardElement) {
   const handleGesture = async () => {
     const diffX = endX - startX;
     const diffY = endY - startY;
-    const threshold = 50; // Minimum distance in pixels to trigger a move
+    const threshold = 25; // Minimum distance in pixels to trigger a move
     let moved = false;
 
     // Determine swipe direction
@@ -127,14 +135,11 @@ if (boardElement) {
   };
 
   // Touch events
-  boardElement.addEventListener(
-    "touchstart",
-    (e) => {
-      e.preventDefault();
-      startX = e.touches[0].clientX;
-      startY = e.touches[0].clientY;
-    }
-  );
+  boardElement.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  });
 
   boardElement.addEventListener("touchend", (e) => {
     e.preventDefault();
