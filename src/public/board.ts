@@ -63,7 +63,7 @@ export class Board {
     const randomIndex = Math.floor(Math.random() * emptyCells.length);
     if (randomIndex < 0 || randomIndex >= emptyCells.length) return false;
     emptyCells[randomIndex].set(Math.random() < 0.7 ? 2 : 4, "come-out");
-    await delay(this.delayTime / 2);
+    await delay(this.delayTime * 2);
     return true;
   }
 
@@ -293,7 +293,7 @@ export class Board {
             break;
         }
         if (moved) {
-          this.addNumberCell();
+          await this.addNumberCell();
         }
       } else {
         console.log("No valid moves available. Stopping AutoPlay.");
