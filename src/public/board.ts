@@ -277,7 +277,7 @@ export class Board {
   }
   async autoPlayStart(autoPlay: boolean = true) {
     this.autoPlay = autoPlay;
-    this.delayTime = 1;
+    this.delayTime = 0;
     while (this.autoPlay) {
       const cellsString = this.cellsToString();
       console.log("AutoPlay cellsString:", cellsString);
