@@ -31,8 +31,8 @@ function adjustLayout() {
   const gameWidthRem = 9.8;
   const gameHeightRem = 13.7; // Rounded
 
-  const viewportWidth = window.innerWidth;
-  const viewportHeight = window.innerHeight;
+  const viewportWidth = window.visualViewport ? window.visualViewport.width : window.innerWidth;
+  const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
 
   // Calculate the font size that would make the game fit the viewport width
   const fontSizeForWidth = viewportWidth / gameWidthRem;
@@ -166,5 +166,23 @@ if (newGameDiv) {
   });
   newGameDiv.addEventListener("touchstart", (event: TouchEvent) => {
     board.resetBoard();
+  });
+}
+
+const secondRowText = document.getElementById("secondRowText");
+if (secondRowText) {
+  secondRowText.addEventListener("click", () => {
+    if (board.autoPlay) {
+      board.autoPlayStop();
+    } else {
+      board.autoPlayStart();
+    }
+  });
+  secondRowText.addEventListener("touchstart", () => {
+    if (board.autoPlay) {
+      board.autoPlayStop();
+    } else {
+      board.autoPlayStart();
+    }
   });
 }

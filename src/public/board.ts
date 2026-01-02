@@ -1,4 +1,5 @@
 import { Cell } from "./cell";
+import { chooseBestMove2, Direction } from "./chooseKey";
 import { Score } from "./score";
 import { delay } from "./util";
 
@@ -11,6 +12,8 @@ export class Board {
   cells: Cells = {};
   gameOver: boolean = false;
   score: Score;
+  lastMove: Direction | null = null;
+  autoPlay: boolean = false;
 
   constructor() {
     this.cells = {};
@@ -252,5 +255,52 @@ export class Board {
     }
     this.addScore(addedScore);
     return moved;
+  }
+
+  // cell to string으로 1$16$4096$2$...
+  cellsToString(myCells: Cells = this.cells): string {
+    let result = "";
+    for (let y = 0; y < 4; y++) {
+      for (let x = 0; x < 4; x++) {
+        result += myCells[x + "-" + y].value + "$";
+      }
+    }
+    return result.slice(0, -1);
+  }
+  async autoPlayStart(autoPlay: boolean = true) {
+    this.autoPlay = autoPlay;
+    while (this.autoPlay) {
+      const cellsString = this.cellsToString();
+      console.log("AutoPlay cellsString:", cellsString);
+      const keys = chooseBestMove2(cellsString);
+      console.log("AutoPlay chosen keys:", keys.dir, keys.ok);
+      this.lastMove = keys.dir;
+      let moved = false;
+      if (keys.ok) {
+        switch (keys.dir) {
+          case "ArrowLeft":
+            moved = await this.moveLeft();
+            break;
+          case "ArrowRight":
+            moved = await this.moveRight();
+            break;
+          case "ArrowUp":
+            moved = await this.moveUp();
+            break;
+          case "ArrowDown":
+            moved = await this.moveDown();
+            break;
+        }
+        if (moved) {
+          this.addNumberCell();
+        }
+      } else {
+        console.log("No valid moves available. Stopping AutoPlay.");
+        this.autoPlay = false;
+      }
+    }
+  }
+  autoPlayStop(): void {
+    this.autoPlay = false;
   }
 }
