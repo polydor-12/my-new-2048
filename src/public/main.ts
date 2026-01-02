@@ -130,13 +130,14 @@ if (boardElement) {
   boardElement.addEventListener(
     "touchstart",
     (e) => {
+      e.preventDefault();
       startX = e.touches[0].clientX;
       startY = e.touches[0].clientY;
-    },
-    { passive: true }
+    }
   );
 
   boardElement.addEventListener("touchend", (e) => {
+    e.preventDefault();
     endX = e.changedTouches[0].clientX;
     endY = e.changedTouches[0].clientY;
     handleGesture();
@@ -175,6 +176,7 @@ if (newGameDiv) {
     board.resetBoard();
   });
   newGameDiv.addEventListener("touchstart", (event: TouchEvent) => {
+    event.preventDefault();
     board.resetBoard();
   });
 }
@@ -188,7 +190,8 @@ if (secondRowText) {
       board.autoPlayStart();
     }
   });
-  secondRowText.addEventListener("touchstart", () => {
+  secondRowText.addEventListener("touchstart", (event: TouchEvent) => {
+    event.preventDefault();
     if (board.autoPlay) {
       board.autoPlayStop();
     } else {
