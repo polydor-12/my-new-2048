@@ -63,6 +63,13 @@ export class Board {
     const randomIndex = Math.floor(Math.random() * emptyCells.length);
     if (randomIndex < 0 || randomIndex >= emptyCells.length) return false;
     emptyCells[randomIndex].set(Math.random() < 0.7 ? 2 : 4, "come-out");
+    console.log(
+      "Added number cell at",
+      emptyCells[randomIndex].x,
+      emptyCells[randomIndex].y,
+      "with value",
+      emptyCells[randomIndex].value
+    );
     await delay(this.delayTime * 2);
     return true;
   }
