@@ -21,6 +21,10 @@ console.log("main.ts loaded");
 
 const board = new Board();
 
+function isMobile() {
+  return 'ontouchstart' in window || navigator.maxTouchPoints > 0 || window.innerWidth < 768;
+}
+
 function adjustLayout() {
   const mainElement = document.getElementById("main");
   if (!mainElement) return;
@@ -44,6 +48,12 @@ function adjustLayout() {
 
   // Apply the new font size to the root element
   document.documentElement.style.fontSize = `${newFontSize}px`;
+
+  if (isMobile()) {
+    document.body.style.alignItems = "flex-start";
+  } else {
+    document.body.style.alignItems = "center";
+  }
 }
 
 // Adjust layout on initial load
