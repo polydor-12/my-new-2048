@@ -48,7 +48,7 @@ export class Board {
     this.addNumberCell();
     this.addNumberCell();
   }
-  addNumberCell(myCells: Cells = this.cells): boolean {
+  async addNumberCell(myCells: Cells = this.cells): Promise<boolean> {
     const emptyCells: Cell[] = [];
     for (let x = 0; x < 4; x++) {
       for (let y = 0; y < 4; y++) {
@@ -63,6 +63,7 @@ export class Board {
     const randomIndex = Math.floor(Math.random() * emptyCells.length);
     if (randomIndex < 0 || randomIndex >= emptyCells.length) return false;
     emptyCells[randomIndex].set(Math.random() < 0.7 ? 2 : 4, "come-out");
+    await delay(this.delayTime / 2);
     return true;
   }
 
@@ -275,8 +276,8 @@ export class Board {
       const keys = chooseBestMove2(cellsString);
       console.log("AutoPlay chosen keys:", keys.dir, keys.ok);
       this.lastMove = keys.dir;
-      let moved = false;
       if (keys.ok) {
+        let moved = false;
         switch (keys.dir) {
           case "ArrowLeft":
             moved = await this.moveLeft();
