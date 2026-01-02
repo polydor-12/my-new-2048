@@ -219,4 +219,5 @@ const app = initializeApp(firebaseConfig);
 console.log("main.ts loaded");
 
 const board = new Board();
+
 main();
