@@ -15,11 +15,6 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
-console.log("main.ts loaded");
-
-const board = new Board();
 
 function isMobile() {
   return (
@@ -29,178 +24,199 @@ function isMobile() {
   );
 }
 
-function adjustLayout() {
-  const mainElement = document.getElementById("main");
-  if (!mainElement) return;
+function setDisplaySet() {
+  function adjustLayout() {
+    const mainElement = document.getElementById("main");
+    if (!mainElement) return;
 
-  // The game's designed dimensions in rem units.
-  // Width: 9rem (main) + 0.4rem*2 (main padding) = 9.8rem
-  // Height: ~3.89rem (header) + 9rem (board) + 0.4rem*2 (main padding) = ~13.69rem
-  const gameWidthRem = 9.8;
-  const gameHeightRem = 13.7; // Rounded
+    // The game's designed dimensions in rem units.
+    // Width: 9rem (main) + 0.4rem*2 (main padding) = 9.8rem
+    // Height: ~3.89rem (header) + 9rem (board) + 0.4rem*2 (main padding) = ~13.69rem
+    const gameWidthRem = 9.8;
+    const gameHeightRem = 13.7; // Rounded
 
-  const viewportWidth = window.visualViewport
-    ? window.visualViewport.width
-    : window.innerWidth;
-  const viewportHeight = window.visualViewport
-    ? window.visualViewport.height
-    : window.innerHeight;
+    const viewportWidth = window.visualViewport
+      ? window.visualViewport.width
+      : window.innerWidth;
+    const viewportHeight = window.visualViewport
+      ? window.visualViewport.height
+      : window.innerHeight;
 
-  // Calculate the font size that would make the game fit the viewport width
-  const fontSizeForWidth = viewportWidth / gameWidthRem;
-  // Calculate the font size that would make the game fit the viewport height
-  const fontSizeForHeight = viewportHeight / gameHeightRem;
+    // Calculate the font size that would make the game fit the viewport width
+    const fontSizeForWidth = viewportWidth / gameWidthRem;
+    // Calculate the font size that would make the game fit the viewport height
+    const fontSizeForHeight = viewportHeight / gameHeightRem;
 
-  // Choose the smaller of the two to ensure the game fits in both dimensions
-  const newFontSize = Math.min(fontSizeForWidth, fontSizeForHeight);
+    // Choose the smaller of the two to ensure the game fits in both dimensions
+    const newFontSize = Math.min(fontSizeForWidth, fontSizeForHeight);
 
-  // Apply the new font size to the root element
-  document.documentElement.style.fontSize = `${newFontSize}px`;
+    // Apply the new font size to the root element
+    document.documentElement.style.fontSize = `${newFontSize}px`;
 
-  if (isMobile()) {
-    document.body.style.alignItems = "flex-start";
-  } else {
-    document.body.style.alignItems = "center";
+    if (isMobile()) {
+      document.body.style.alignItems = "flex-start";
+    } else {
+      document.body.style.alignItems = "center";
+    }
   }
+
+  // Adjust layout on initial load
+  adjustLayout();
+
+  // Adjust layout on window resize
+  window.addEventListener("resize", adjustLayout);
 }
 
-// Adjust layout on initial load
-adjustLayout();
-
-// Adjust layout on window resize
-window.addEventListener("resize", adjustLayout);
-
-// Add keyboard event listener for game controls
-document.addEventListener("keydown", async (event) => {
-  let moved = false;
-  switch (event.key) {
-    case "ArrowUp":
-      moved = await board.moveUp();
-      break;
-    case "ArrowDown":
-      moved = await board.moveDown();
-      break;
-    case "ArrowLeft":
-      moved = await board.moveLeft();
-      break;
-    case "ArrowRight":
-      moved = await board.moveRight();
-      break;
-  }
-
-  if (moved) {
-    board.addNumberCell();
-  }
-});
-
-// Add touch and mouse drag controls
-const boardElement = document.getElementById("board");
-if (boardElement) {
-  let startX = 0;
-  let startY = 0;
-  let endX = 0;
-  let endY = 0;
-  let isDragging = false;
-
-  const handleGesture = async () => {
-    const diffX = endX - startX;
-    const diffY = endY - startY;
-    const threshold = 25; // Minimum distance in pixels to trigger a move
+function moveKeySet() {
+  // Add keyboard event listener for game controls
+  document.addEventListener("keydown", async (event) => {
     let moved = false;
-
-    // Determine swipe direction
-    if (Math.abs(diffX) > Math.abs(diffY)) {
-      // Horizontal swipe
-      if (Math.abs(diffX) > threshold) {
-        if (diffX > 0) {
-          moved = await board.moveRight();
-        } else {
-          moved = await board.moveLeft();
-        }
-      }
-    } else {
-      // Vertical swipe
-      if (Math.abs(diffY) > threshold) {
-        if (diffY > 0) {
-          moved = await board.moveDown();
-        } else {
-          moved = await board.moveUp();
-        }
-      }
+    switch (event.key) {
+      case "ArrowUp":
+        moved = await board.moveUp();
+        break;
+      case "ArrowDown":
+        moved = await board.moveDown();
+        break;
+      case "ArrowLeft":
+        moved = await board.moveLeft();
+        break;
+      case "ArrowRight":
+        moved = await board.moveRight();
+        break;
     }
 
     if (moved) {
       board.addNumberCell();
     }
-  };
-
-  // Touch events
-  boardElement.addEventListener("touchstart", (e) => {
-    e.preventDefault();
-    startX = e.touches[0].clientX;
-    startY = e.touches[0].clientY;
   });
 
-  boardElement.addEventListener("touchend", (e) => {
-    e.preventDefault();
-    endX = e.changedTouches[0].clientX;
-    endY = e.changedTouches[0].clientY;
-    handleGesture();
-  });
+  // Add touch and mouse drag controls
+  const boardElement = document.getElementById("board");
+  if (boardElement) {
+    let startX = 0;
+    let startY = 0;
+    let endX = 0;
+    let endY = 0;
+    let isDragging = false;
 
-  // Mouse events
-  boardElement.addEventListener("mousedown", (e) => {
-    isDragging = true;
-    startX = e.clientX;
-    startY = e.clientY;
-    e.preventDefault();
-  });
+    const handleGesture = async () => {
+      const diffX = endX - startX;
+      const diffY = endY - startY;
+      const threshold = 25; // Minimum distance in pixels to trigger a move
+      let moved = false;
 
-  boardElement.addEventListener("mouseup", (e) => {
-    if (isDragging) {
-      isDragging = false;
-      endX = e.clientX;
-      endY = e.clientY;
+      // Determine swipe direction
+      if (Math.abs(diffX) > Math.abs(diffY)) {
+        // Horizontal swipe
+        if (Math.abs(diffX) > threshold) {
+          if (diffX > 0) {
+            moved = await board.moveRight();
+          } else {
+            moved = await board.moveLeft();
+          }
+        }
+      } else {
+        // Vertical swipe
+        if (Math.abs(diffY) > threshold) {
+          if (diffY > 0) {
+            moved = await board.moveDown();
+          } else {
+            moved = await board.moveUp();
+          }
+        }
+      }
+
+      if (moved) {
+        board.addNumberCell();
+      }
+    };
+
+    // Touch events
+    boardElement.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    });
+
+    boardElement.addEventListener("touchend", (e) => {
+      e.preventDefault();
+      endX = e.changedTouches[0].clientX;
+      endY = e.changedTouches[0].clientY;
       handleGesture();
-    }
-  });
+    });
 
-  boardElement.addEventListener("mouseleave", (e) => {
-    if (isDragging) {
-      isDragging = false;
-      endX = e.clientX;
-      endY = e.clientY;
-      handleGesture();
-    }
-  });
+    // Mouse events
+    boardElement.addEventListener("mousedown", (e) => {
+      isDragging = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      e.preventDefault();
+    });
+
+    boardElement.addEventListener("mouseup", (e) => {
+      if (isDragging) {
+        isDragging = false;
+        endX = e.clientX;
+        endY = e.clientY;
+        handleGesture();
+      }
+    });
+
+    boardElement.addEventListener("mouseleave", (e) => {
+      if (isDragging) {
+        isDragging = false;
+        endX = e.clientX;
+        endY = e.clientY;
+        handleGesture();
+      }
+    });
+  }
 }
 
-const newGameDiv = document.getElementById("secondRowNewGame");
-if (newGameDiv) {
-  newGameDiv.addEventListener("click", () => {
-    board.resetBoard();
-  });
-  newGameDiv.addEventListener("touchstart", (event: TouchEvent) => {
-    event.preventDefault();
-    board.resetBoard();
-  });
+function resetBoardKeySet() {
+  const newGameDiv = document.getElementById("secondRowNewGame");
+  if (newGameDiv) {
+    newGameDiv.addEventListener("click", () => {
+      board.resetBoard();
+    });
+    newGameDiv.addEventListener("touchstart", (event: TouchEvent) => {
+      event.preventDefault();
+      board.resetBoard();
+    });
+  }
 }
 
-const secondRowText = document.getElementById("secondRowText");
-if (secondRowText) {
-  secondRowText.addEventListener("click", () => {
-    if (board.autoPlay) {
-      board.autoPlayStop();
-    } else {
-      board.autoPlayStart();
-    }
-  });
-  secondRowText.addEventListener("touchstart", (event: TouchEvent) => {
-    event.preventDefault();
-    if (board.autoPlay) {
-      board.autoPlayStop();
-    } else {
-      board.autoPlayStart();
-    }
-  });
+function autoPlayKeySet() {
+  const secondRowText = document.getElementById("secondRowText");
+  if (secondRowText) {
+    secondRowText.addEventListener("click", () => {
+      if (board.autoPlay) {
+        board.autoPlayStop();
+      } else {
+        board.autoPlayStart();
+      }
+    });
+    secondRowText.addEventListener("touchstart", (event: TouchEvent) => {
+      event.preventDefault();
+      if (board.autoPlay) {
+        board.autoPlayStop();
+      } else {
+        board.autoPlayStart();
+      }
+    });
+  }
 }
+
+function main() {
+  setDisplaySet();
+  moveKeySet();
+  resetBoardKeySet();
+  autoPlayKeySet();
+}
+const app = initializeApp(firebaseConfig);
+
+console.log("main.ts loaded");
+
+const board = new Board();
+main();
