@@ -7,7 +7,7 @@ var gameboard = {
   version: 1,
   bgcolor: "",
 };
-var previewboard1 = {
+var previewBoard1 = {
   name: "previewboard1",
   y: 5,
   x: 5,
@@ -15,7 +15,7 @@ var previewboard1 = {
   version: 2,
   bgcolor: "",
 };
-var previewboard2 = {
+var previewBoard2 = {
   name: "previewboard2",
   y: 5,
   x: 5,
@@ -46,8 +46,8 @@ const Rectangle = 0,
   Stick = 1,
   R_curved = 2,
   L_curved = 3,
-  Zigzeg1 = 4,
-  Zigzeg2 = 5,
+  ZigZeg1 = 4,
+  ZigZeg2 = 5,
   Pinup = 6;
 const Left = 0,
   Right = 1,
@@ -81,9 +81,9 @@ var block = {
         return "purple";
       case L_curved:
         return "green";
-      case Zigzeg1:
+      case ZigZeg1:
         return "blue";
-      case Zigzeg2:
+      case ZigZeg2:
         return "brown";
       case Pinup:
         return "orange";
@@ -194,7 +194,7 @@ var block = {
               [col, row + 1],
             ];
         }
-      case Zigzeg1:
+      case ZigZeg1:
         switch (this.version % 4) {
           case 0:
             return [
@@ -225,7 +225,7 @@ var block = {
               [col - 1, row + 1],
             ];
         }
-      case Zigzeg2:
+      case ZigZeg2:
         switch (this.version % 4) {
           case 0:
             return [
@@ -439,7 +439,7 @@ var block = {
 
 // board 구성 함수
 function draw_table(board) {
-  var gametable = document.getElementById(board.name);
+  var gameTable = document.getElementById(board.name);
   for (let y = 0; y < board.y; y++) {
     let tr_new = document.createElement("tr");
     for (let x = 0; x < board.x; x++) {
@@ -448,7 +448,7 @@ function draw_table(board) {
       td_new.style.backgroundColor = board.bgcolor;
       tr_new.appendChild(td_new);
     }
-    gametable.appendChild(tr_new);
+    gameTable.appendChild(tr_new);
   }
 }
 
@@ -502,12 +502,12 @@ function init_window() {
   $("#base").css("display", "flex");
   fill_div(gameboard.name, gameboard.x, gameboard.y, 1);
   $("#gameboard div").css("margin", "1px");
-  fill_div(previewboard1.name, previewboard1.x, previewboard1.y, 1);
+  fill_div(previewBoard1.name, previewBoard1.x, previewBoard1.y, 1);
   $("#previewboard1 div").css("margin", "1px");
-  fill_div(previewboard2.name, previewboard2.x, previewboard2.y, 1);
+  fill_div(previewBoard2.name, previewBoard2.x, previewBoard2.y, 1);
   $("#previewboard2 div").css("margin", "1px");
   write_information();
-  write_cotrol_pad();
+  write_control_pad();
   $("#scoreboard").css("font-size", $("#scoreboard").width() / 7 + "px");
   $(".best_players_div")
     .css("padding-left", $("#scoreboard").width() / 9 + "px")
@@ -526,35 +526,113 @@ function init_window_size() {
     $("#mainframe").width(y / ratio - 15);
   }
   sizing_div(gameboard.name, gameboard.x, gameboard.y, 1);
-  sizing_div(previewboard1.name, previewboard1.x, previewboard1.y, 1);
-  sizing_div(previewboard2.name, previewboard2.x, previewboard2.y, 1);
+  sizing_div(previewBoard1.name, previewBoard1.x, previewBoard1.y, 1);
+  sizing_div(previewBoard2.name, previewBoard2.x, previewBoard2.y, 1);
   write_information();
-  write_cotrol_pad();
+  write_control_pad();
   $("#scoreboard").css("font-size", $("#scoreboard").width() / 7 + "px");
   $(".best_players_div")
     .css("padding-left", $("#scoreboard").width() / 9 + "px")
     .css("padding-right", $("#scoreboard").width() / 9 + "px");
 }
 
+// function best_record_write() {
+//   let index = 1;
+//   let record_name = "/record/bestrecord_pc.txt";
+//   pc_or_mobile();
+//   console.log("MODEL", model);
+//   if (model == "MOBILE") {
+//     record_name = "/record/bestrecord_mobile.txt";
+//   }
+//   console.log("record_name", record_name);
+//   $("#no0p").load(record_name, function (res, sta) {
+//     let string = $("#no0p").text().split(" ");
+//     for (let i = 0; i < 5; i++) {
+//       $("#no" + i + "p").text(string[index]);
+//       index++;
+//       $("#no" + i + "s").text(string[index]);
+//       index++;
+//     }
+//     console.log("기록 불러와서 홈페이지에 계시됨");
+//   });
+// }
+
+// 로컬 스토리지에서 키에 해당하는 기록 문자열을 읽어 반환
+function readRecordFromStorage(key) {
+  const val = localStorage.getItem(key);
+  return val !== null ? val : null;
+}
+
+// 로컬 스토리지에 기록 문자열을 저장
+function writeRecordToStorage(key, recordString) {
+  // recordString은 "이름 점수 이름 점수 ..." 형태의 문자열
+  localStorage.setItem(key, recordString);
+}
+
+// 초기값 세팅: 기록이 없으면 기본값을 넣음
+function ensureDefaultRecord(key) {
+  if (readRecordFromStorage(key) === null) {
+    // 기본값 예시: 5명(이름 점수 * 5). 필요에 맞게 수정하세요.
+    const defaultArr = [
+      "장민",
+      "1000",
+      "양정원",
+      "900",
+      "이석희",
+      "800",
+      "장지혜",
+      "700",
+      "장지현",
+      "600",
+    ];
+    writeRecordToStorage(key, defaultArr.join(" "));
+  }
+}
+
+// 화면에 기록을 채우는 함수 (원래 best_record_write의 역할)
 function best_record_write() {
   let index = 1;
   let record_name = "/record/bestrecord_pc.txt";
-  pc_or_mobile();
+  pc_or_mobile(); // 기존 함수 호출(외부에서 model을 설정)
   console.log("MODEL", model);
-  if (model == "MOBILE") {
+  if (model === "MOBILE") {
     record_name = "/record/bestrecord_mobile.txt";
   }
   console.log("record_name", record_name);
-  $("#no0p").load(record_name, function (res, sta) {
-    let string = $("#no0p").text().split(" ");
-    for (let i = 0; i < 5; i++) {
-      $("#no" + i + "p").text(string[index]);
-      index++;
-      $("#no" + i + "s").text(string[index]);
-      index++;
-    }
-    console.log("기록 불러와서 홈페이지에 계시됨");
+
+  // 로컬 스토리지에서 읽어오기 전에 기본값 보장
+  ensureDefaultRecord(record_name);
+
+  const recordString = readRecordFromStorage(record_name);
+  if (!recordString) {
+    console.warn("기록을 불러오지 못했습니다.");
+    return;
+  }
+
+  // 공백으로 분리
+  const parts = recordString.split(/\s+/);
+  // parts[0]는 보통 인덱스 또는 헤더일 수 있으므로 기존 코드처럼 index=1에서 시작
+  for (let i = 0; i < 5; i++) {
+    const name = parts[index] !== undefined ? parts[index] : "";
+    index++;
+    const score = parts[index] !== undefined ? parts[index] : "";
+    index++;
+    $("#no" + i + "p").text(name);
+    $("#no" + i + "s").text(score);
+  }
+  console.log("기록 불러와서 홈페이지에 게시됨");
+}
+
+// 예시: 기록을 업데이트(쓰기)하는 함수
+// records는 [{name: "AAA", score: 1000}, ...] 형식의 배열
+function updateBestRecords(recordKey, records) {
+  // 문자열로 변환: name score name score ...
+  const flat = [];
+  records.forEach((r) => {
+    flat.push(String(r.name));
+    flat.push(String(r.score));
   });
+  writeRecordToStorage(recordKey, flat.join(" "));
 }
 
 window.onload = function () {
@@ -574,10 +652,10 @@ window.onload = function () {
   var tetris_music = document.getElementById("tetris_music");
   tetris_music.src =
     "music\\" + music_list[Math.floor(Math.random() * music_list.length)];
-  previewboard1.type = Math.floor(Math.random() * 7);
-  previewboard2.version = Math.floor(Math.random() * 4);
-  previewboard2.type = Math.floor(Math.random() * 7);
-  previewboard2.version = Math.floor(Math.random() * 4);
+  previewBoard1.type = Math.floor(Math.random() * 7);
+  previewBoard2.version = Math.floor(Math.random() * 4);
+  previewBoard2.type = Math.floor(Math.random() * 7);
+  previewBoard2.version = Math.floor(Math.random() * 4);
   touch_install();
   ending_music.onended = function () {
     score_to_server();
@@ -592,8 +670,6 @@ function touch_install() {
     .addEventListener("touchstart", function (event) {
       event.preventDefault();
     });
-  //	document.getElementById("leftframe").addEventListener("touchstart", function(event){
-  //		event.preventDefault();});
   document
     .getElementById("gameboard")
     .addEventListener("touchstart", function (event) {
@@ -829,25 +905,25 @@ function init_board() {
   // 새블럭으로 출발
   score += 40;
   write_score();
-  erase_board(previewboard2);
-  erase_board(previewboard1);
+  erase_board(previewBoard2);
+  erase_board(previewBoard1);
   block.now_on = Off;
   block.col = 2;
   block.row = 2;
-  block.board = previewboard2;
-  gameboard.type = previewboard1.type; // gameboard 블럭에 type, version 전달
-  gameboard.version = previewboard1.version;
-  previewboard1.type = previewboard2.type; // previewboard1 블럭에 type, version 전달
-  previewboard1.version = previewboard2.version;
-  previewboard2.type = Math.floor(Math.random() * 7); // previewboard2 새블럭
-  previewboard2.version = Math.floor(Math.random() * 4);
-  block.type = previewboard2.type;
-  block.version = previewboard2.version;
+  block.board = previewBoard2;
+  gameboard.type = previewBoard1.type; // gameboard 블럭에 type, version 전달
+  gameboard.version = previewBoard1.version;
+  previewBoard1.type = previewBoard2.type; // previewBoard1 블럭에 type, version 전달
+  previewBoard1.version = previewBoard2.version;
+  previewBoard2.type = Math.floor(Math.random() * 7); // previewBoard2 새블럭
+  previewBoard2.version = Math.floor(Math.random() * 4);
+  block.type = previewBoard2.type;
+  block.version = previewBoard2.version;
   block.view(On);
   block.now_on = Off;
-  block.board = previewboard1;
-  block.type = previewboard1.type;
-  block.version = previewboard1.version;
+  block.board = previewBoard1;
+  block.type = previewBoard1.type;
+  block.version = previewBoard1.version;
   block.view(On);
   block.now_on = Off;
   block.board = gameboard;
@@ -855,7 +931,7 @@ function init_board() {
   block.version = gameboard.version;
   block.row = 4;
   block.col = 0;
-  erase_spaceline();
+  erase_spaceLine();
   while (true) {
     // 시작할 때 첫줄부터 나오도록 하고 게임종료를 알림
     if (position_check()) {
@@ -876,10 +952,10 @@ function init_board() {
   write_score();
 }
 // 맞춰진 블럭 지우기
-function erase_spaceline() {
+function erase_spaceLine() {
   let x = 100;
   for (let y = block.board.y - 1; y > 0; y--) {
-    if (check_spaceline(y)) {
+    if (check_spaceLine(y)) {
       redraw_board(y);
       sound2.play();
       score += x;
@@ -889,7 +965,7 @@ function erase_spaceline() {
     }
   }
 }
-function check_spaceline(col) {
+function check_spaceLine(col) {
   for (let x = 0; x < block.board.x; x++) {
     if (
       document.getElementById(block.board.name + "_" + col + "_" + x).style
@@ -1024,7 +1100,7 @@ var pad_map = [
   ],
 ];
 
-function write_cotrol_pad() {
+function write_control_pad() {
   let pad_color = ["red", "blue", "purple", "brown", "green"];
   for (let i = 0; i < pad.length; i++) {
     $("#" + pad[i])
