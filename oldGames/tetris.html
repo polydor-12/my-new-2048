@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+    />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script src="js/tetris_mobile3.js" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="css/tetris_mobile3.css" />
+    <title>테트리스 - 장민, 장지혜, 장지현</title>
+  </head>
+  <body>
+    <div id="base">
+      <div id="mainframe">
+        <div id="maincontainer">
+          <div id="leftframe">
+            <div id="information"></div>
+            <audio
+              autostart="false"
+              width="0"
+              height="0"
+              id="tetris_music"
+            ></audio>
+          </div>
+          <div id="gameboard"></div>
+          <div id="rightframe">
+            <div id="previewboard">
+              <div id="previewboard1"></div>
+              <div id="previewboard2"></div>
+              <audio
+                src="music/my1.mp3"
+                autostart="false"
+                width="0"
+                height="0"
+                id="sound1"
+              ></audio>
+              <audio
+                src="music/my2.mp3"
+                autostart="false"
+                width="0"
+                height="0"
+                id="sound2"
+              ></audio>
+              <audio
+                src="music/Game_Over.mp3"
+                autostart="false"
+                width="0"
+                height="0"
+                id="ending_music"
+              ></audio>
+              <form name="myform" id="form" action="\" method="post"></form>
+            </div>
+            <div id="scoreboard">
+              <div class="player_record" id="level">LEVEL01</div>
+              <div class="player_record">SCORE</div>
+              <div class="player_record" id="score">점수기록</div>
+              <div class="player_record">BEST SCORE</div>
+              <div id="best_players">
+                <dir class="best_players_div">
+                  <span id="no0p"></span><span id="no0s"></span>
+                </dir>
+                <dir class="best_players_div">
+                  <span id="no1p"></span><span id="no1s"></span>
+                </dir>
+                <dir class="best_players_div">
+                  <span id="no2p"></span><span id="no2s"></span>
+                </dir>
+                <dir class="best_players_div">
+                  <span id="no3p"></span><span id="no3s"></span>
+                </dir>
+                <dir class="best_players_div">
+                  <span id="no4p"></span><span id="no4s"></span>
+                </dir>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="control_pad">
+          <div class="pad">
+            <div id="left_pad"></div>
+          </div>
+          <div class="pad">
+            <div id="rotate_pad"></div>
+          </div>
+          <div class="pad">
+            <div id="bottom_pad"></div>
+          </div>
+          <div class="pad">
+            <div id="down_pad"></div>
+          </div>
+          <div class="pad">
+            <div id="right_pad"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

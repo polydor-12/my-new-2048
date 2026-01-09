@@ -1,0 +1,178 @@
+#base {
+  display: flex;
+  box-sizing: border-box;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  -webkit-flex: 0 1 auto;
+  -ms-flex: 0 1 auto;
+  align-items: center;
+  justify-content: center;
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+  display: none;
+}
+#mainframe {
+  display: -webkit-flex; /* Safari */
+  -webkit-flex-direction: row; /* Safari 6.1+ */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex-direction: column;
+}
+
+#maincontainer {
+  display: -webkit-flex; /* Safari */
+  -webkit-flex-direction: row; /* Safari 6.1+ */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  position: relative;
+  width: 100%;
+  height: 85%;
+  background-image: url("tetris.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-blend-mode: lighten;
+}
+
+#leftframe {
+  display: -webkit-flex; /* Safari */
+  -webkit-flex-direction: row; /* Safari 6.1+ */
+  display: flex;
+  align-items: center;
+  width: 23%;
+  height: 95%;
+}
+
+#gameboard {
+  display: -webkit-flex; /* Safari */
+  -webkit-flex-direction: row; /* Safari 6.1+ */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 54%;
+  height: 95%;
+  display: -webkit-flex; /* Safari */
+  -webkit-flex-wrap: wrap; /* Safari 6.1+ */
+  margin: 0px;
+  padding: 0px;
+  background-color: rgba(0, 0, 0, 0.65);
+  border: 1px ridge gray;
+}
+#rightframe {
+  display: -webkit-flex; /* Safari */
+  -webkit-flex-direction: row; /* Safari 6.1+ */
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 23%;
+  height: 95%;
+}
+#previewboard {
+  display: -webkit-flex; /* Safari */
+  -webkit-flex-direction: row; /* Safari 6.1+ */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 40%;
+  margin-bottom: 7px;
+}
+#scoreboard {
+  color: white;
+  display: -webkit-flex; /* Safari */
+  -webkit-flex-direction: row; /* Safari 6.1+ */
+  display: flex;
+  width: 100%;
+  height: 60%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 10px;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.player_record {
+  width: 100%;
+  height: 10%;
+  text-align: center;
+  padding: 0px;
+  padding-bottom: 10px;
+}
+#best_players {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0px;
+  margin: 0px;
+  height: 50%;
+  width: 100%;
+  font-size: 80%;
+}
+.best_players_div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  height: 4%;
+  width: 100%;
+  padding: 0px;
+  margin: 0px;
+  height: 20%;
+  width: 100%;
+}
+
+#previewboard1 {
+  width: 90%;
+  height: 46%;
+  border: 1px solid gray;
+  margin-bottom: 10%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+#previewboard2 {
+  width: 81%;
+  height: 39%;
+  border: 1px solid gray;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+#information {
+  width: 100%;
+  height: 95%;
+}
+
+form {
+  display: none;
+}
+#control_pad {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+  height: 15%;
+  border: 1px solid MediumBlue;
+}
+
+.pad {
+  display: flex;
+  height: 100%;
+  width: 25%;
+  margin: 0px;
+  padding: 0px;
+  border: 1px solid MediumBlue;
+  align-items: center;
+  justify-content: center;
+}
