@@ -36,6 +36,7 @@ var best_score = 0;
 var model = "mobile";
 var mobile_os = "";
 var iOS_ending = false;
+const record_name = "tetris_best_scores";
 
 // 변수선언
 var score = 0;
@@ -536,90 +537,43 @@ function init_window_size() {
     .css("padding-right", $("#scoreboard").width() / 9 + "px");
 }
 
-// function best_record_write() {
-//   let index = 1;
-//   let record_name = "/record/bestrecord_pc.txt";
-//   pc_or_mobile();
-//   console.log("MODEL", model);
-//   if (model == "MOBILE") {
-//     record_name = "/record/bestrecord_mobile.txt";
-//   }
-//   console.log("record_name", record_name);
-//   $("#no0p").load(record_name, function (res, sta) {
-//     let string = $("#no0p").text().split(" ");
-//     for (let i = 0; i < 5; i++) {
-//       $("#no" + i + "p").text(string[index]);
-//       index++;
-//       $("#no" + i + "s").text(string[index]);
-//       index++;
-//     }
-//     console.log("기록 불러와서 홈페이지에 계시됨");
-//   });
-// }
-
 // 로컬 스토리지에서 키에 해당하는 기록 문자열을 읽어 반환
 function readRecordFromStorage(key) {
   const val = localStorage.getItem(key);
-  return val !== null ? val : null;
-}
-
-// 로컬 스토리지에 기록 문자열을 저장
-function writeRecordToStorage(key, recordString) {
-  // recordString은 "이름 점수 이름 점수 ..." 형태의 문자열
-  localStorage.setItem(key, recordString);
+  return JSON.parse(val);
 }
 
 // 초기값 세팅: 기록이 없으면 기본값을 넣음
-function ensureDefaultRecord(key) {
-  if (readRecordFromStorage(key) === null) {
+function ensureDefaultRecord() {
+  if (readRecordFromStorage(record_name) === null) {
     // 기본값 예시: 5명(이름 점수 * 5). 필요에 맞게 수정하세요.
-    const defaultArr = [
-      "장민",
-      "1000",
-      "양정원",
-      "900",
-      "이석희",
-      "800",
-      "장지혜",
-      "700",
-      "장지현",
-      "600",
-    ];
-    writeRecordToStorage(key, defaultArr.join(" "));
+    const defaultData = {
+      no0p: "장민",
+      no0s: "1500",
+      no1p: "양정원",
+      no1s: "1000",
+      no2p: "이석희",
+      no2s: "900",
+      no3p: "장지혜",
+      no3s: "800",
+      no4p: "장민",
+      no4s: "780",
+    };
+    localStorage.setItem(record_name, JSON.stringify(defaultData));
   }
 }
 
 // 화면에 기록을 채우는 함수 (원래 best_record_write의 역할)
 function best_record_write() {
-  let index = 1;
-  let record_name = "bestRecord_pc";
-  pc_or_mobile(); // 기존 함수 호출(외부에서 model을 설정)
-  console.log("MODEL", model);
-  if (model === "MOBILE") {
-    record_name = "bestRecord_mobile";
-  }
-  console.log("record_name", record_name);
-
   // 로컬 스토리지에서 읽어오기 전에 기본값 보장
   ensureDefaultRecord(record_name);
 
-  const recordString = readRecordFromStorage(record_name);
-  if (!recordString) {
-    console.warn("기록을 불러오지 못했습니다.");
-    return;
-  }
+  const bestScoreRecord = JSON.parse(localStorage.getItem(record_name));
 
-  // 공백으로 분리
-  const parts = recordString.split(/\s+/);
-  // parts[0]는 보통 인덱스 또는 헤더일 수 있으므로 기존 코드처럼 index=1에서 시작
-  for (let i = 0; i < 5; i++) {
-    const name = parts[index] !== undefined ? parts[index] : "";
-    index++;
-    const score = parts[index] !== undefined ? parts[index] : "";
-    index++;
-    $("#no" + i + "p").text(name);
-    $("#no" + i + "s").text(score);
-  }
+  Object.keys(bestScoreRecord).forEach((key) => {
+    console.log(key, bestScoreRecord[key]);
+    document.getElementById(key).innerHTML = bestScoreRecord[key];
+  });
   console.log("기록 불러와서 홈페이지에 게시됨");
 }
 
@@ -1165,13 +1119,8 @@ function score_to_server() {
         "no" + x + "s"
       ).innerHTML; // 서버에 보낼 자료 만듬
     }
-    $.post("/", save_file, function (result) {
-      if (result) {
-        console.log("저장되었습니다.");
-      } else {
-        console.log("저장에 문제가 발생하였습니다!");
-      }
-    });
+
+    localStorage.setItem(record_name, JSON.stringify(save_file));
   }
 }
 function fill_div(id, width_num, height_num, margin) {
