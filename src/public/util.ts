@@ -18,4 +18,4 @@ async function runWithDelay() {
 }
 
 // 함수 실행
-runWithDelay();
+// runWithDelay();
