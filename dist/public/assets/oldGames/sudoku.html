@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <title>스도쿠 - 장민, 양정원</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, user-select=none">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script src="js/sudoku.js" charset='utf-8'></script>
+  <link rel="stylesheet" type="text/css" href="css/sudoku.css">
+</head>
+
+<body>
+  <div id="base_outer">
+    <div class="container-fluid" id="base">
+      <div class="column" id="mainframe">
+        <div id="head_board">
+          <button type="button" id="b01" class="btn btn-primary">다시시작</button>
+          <button type="button" id="b02" class="btn btn-success">일시정지</button>
+          <button type="button" id="b03" class="btn btn-info">고득점자</button>
+          <button type="button" id="bg_music" class="btn btn-warning">음악재생</button>
+          <button type="button" id="b05" class="btn btn-danger">게임저장</button>
+        </div>
+        <div class="main" id="main_loadboard">
+          <div class="container">
+            <br>
+            <h3>게임을 불러옵니다.</h3>
+            <div class="form-group">
+              <label for="load_name">불러올 파일명을 입력해 주세요.</label>
+              <input type="text" class="form-control" id="load_name" name="loadname">
+            </div>
+            <button type="button" class="btn btn-primary" id="load_filename">불러옴</button>
+            <div id="alert_load"></div>
+          </div>
+        </div>
+        <div class="main" id="main_saveboard">
+          <div class="container">
+            <br>
+            <h3>게임을 저장합니다.</h3>
+            <div class="form-group">
+              <label for="save_name">저장할 파일명을 입력해 주세요.</label>
+              <input type="text" class="form-control" id="save_name" name="savename">
+            </div>
+            <button type="button" class="btn btn-primary" id="save_filename">저장</button>
+            <div id="alert_save"></div>
+          </div>
+        </div>
+        <div class="main" class="m_s" id="main_scoreboard">
+          <h3>BEST SCORE</h3>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>이름</th>
+                <th>점수</th>
+                <th>시간</th>
+                <th>틀린횟수</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>01.</td>
+                <td id="No1_n">장민</td>
+                <td id="No1_s">2050</td>
+                <td id="No1_t">12:13</td>
+                <td id="No1_w">4회</td>
+              </tr>
+              <tr>
+                <td>02.</td>
+                <td id="No2_n">양정원</td>
+                <td id="No2_s">1020</td>
+                <td id="No2_t">13:20</td>
+                <td id="No2_w">2회</td>
+              </tr>
+              <tr>
+                <td>03.</td>
+                <td id="No3_n">양정원</td>
+                <td id="No3_s">1020</td>
+                <td id="No3_t">13:20</td>
+                <td id="No3_w">2회</td>
+              </tr>
+              <tr>
+                <td>04.</td>
+                <td id="No4_n">양정원</td>
+                <td id="No4_s">1010</td>
+                <td id="No4_t">14:20</td>
+                <td id="No4_w">2회</td>
+              </tr>
+              <tr>
+                <td>05.</td>
+                <td id="No5_n">양정원</td>
+                <td id="No5_s">820</td>
+                <td id="No5_t">17:20</td>
+                <td id="No5_w">2회</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="main" class="m_s" id="main_firstboard">
+        </div>
+        <div class="main" class="m_s" id="main_endingboard">
+          <br>
+          <h2 id="clear_txt">Clear!! 축하합니다.</h2>
+          <br>
+          <h3>YOUR SCORE</h3>
+          <table class="table table-striped">
+            <tbody>
+              <tr>
+                <td>점 수</td>
+                <td id="y_score"></td>
+              </tr>
+              <tr>
+                <td>소요시간</td>
+                <td id="y_time"></td>
+              </tr>
+              <tr>
+                <td>틀린횟수</td>
+                <td id="y_wrongnum"></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="container" id="input_name">
+            <br>
+            <form>
+              <div class="form-group">
+                <label for="usr_name">이름을 입력해 주세요.</label>
+                <input type="text" class="form-control" id="usr_name" name="username">
+              </div>
+              <button type="button" class="btn btn-primary" id="input_name_save">저장</button>
+            </form>
+          </div>
+        </div>
+        <div class="main" class="m_s" id="main_pauseboard">
+        </div>
+        <div class="main" class="m_s" id="main_startboard">
+          <br>
+          <h3>SUDOKU</h3>
+          <p>난이도를 선택해 주세요.</p>
+          <table id="start_table" class="table table-striped">
+            <tbody>
+              <tr id="beginner">
+                <td><button type="button" class="btn btn-primary">초급</button></td>
+                <td>스트레스 없이 가볍게 플레이하기</td>
+              </tr>
+              <tr id="intermediate">
+                <td><button type="button" class="btn btn-success">중급</button></td>
+                <td>빠르게 플레이해서 타임어택하기</td>
+              </tr>
+              <tr id="superior">
+                <td><button type="button" class="btn btn-warning">고급</button></td>
+                <td>인내심 충만! 클리어에 도전하기</td>
+              </tr>
+              <tr id="loading">
+                <td><button type="button" class="btn btn-danger">로드</button></td>
+                <td>저장한 게임을 계속해서 도전하기</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="main" class="m_s_m" id="main_board">
+        </div>
+        <div class="m_s_m" id="foot_board">
+        </div>
+      </div>
+      <div>
+      </div>
+</body>
+
+</html>
