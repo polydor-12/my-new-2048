@@ -592,11 +592,11 @@ function ensureDefaultRecord(key) {
 // 화면에 기록을 채우는 함수 (원래 best_record_write의 역할)
 function best_record_write() {
   let index = 1;
-  let record_name = "/record/bestrecord_pc.txt";
+  let record_name = "bestRecord_pc";
   pc_or_mobile(); // 기존 함수 호출(외부에서 model을 설정)
   console.log("MODEL", model);
   if (model === "MOBILE") {
-    record_name = "/record/bestrecord_mobile.txt";
+    record_name = "bestRecord_mobile";
   }
   console.log("record_name", record_name);
 
