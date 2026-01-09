@@ -8,7 +8,7 @@ var gameboard = {
   bgcolor: "",
 };
 var previewBoard1 = {
-  name: "previewboard1",
+  name: "previewBoard1",
   y: 5,
   x: 5,
   type: 3,
@@ -16,7 +16,7 @@ var previewBoard1 = {
   bgcolor: "",
 };
 var previewBoard2 = {
-  name: "previewboard2",
+  name: "previewBoard2",
   y: 5,
   x: 5,
   type: 5,
@@ -504,9 +504,9 @@ function init_window() {
   fill_div(gameboard.name, gameboard.x, gameboard.y, 1);
   $("#gameboard div").css("margin", "1px");
   fill_div(previewBoard1.name, previewBoard1.x, previewBoard1.y, 1);
-  $("#previewboard1 div").css("margin", "1px");
+  $("#previewBoard1 div").css("margin", "1px");
   fill_div(previewBoard2.name, previewBoard2.x, previewBoard2.y, 1);
-  $("#previewboard2 div").css("margin", "1px");
+  $("#previewBoard2 div").css("margin", "1px");
   write_information();
   write_control_pad();
   $("#scoreboard").css("font-size", $("#scoreboard").width() / 7 + "px");
