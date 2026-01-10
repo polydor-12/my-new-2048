@@ -70,8 +70,9 @@ var s_t2 = Object.assign({}, s_t);
 s_t2.fontSize = pSize / 9;
 var style2 = new TextStyle(s_t2);
 var style = new TextStyle(s_t);
-var record, userlevel;
+var userLevel;
 var ending_mode = false;
+const bestRecords = load_best_record();
 
 var select_stage = {
   tiles: [],
@@ -97,29 +98,6 @@ var select_stage = {
       this.tiles[i].tile.visible = true;
     }
   },
-  // head_text: function() {
-  //   $("#t").text("loading....");
-  //   let head_textbox = new Container();
-  //   head_textbox.pivot.set(0.5, 0.5);
-  //   head_textbox.position.set(pSize / 2, margin / 2);
-  //   head_textbox.width = pSize;
-  //   head_textbox.height = margin;
-  //   let title = new Text("Photo Puzzle", style);
-  //   title.anchor.set(0.5, 0.5);
-  //   title.position.set(head_textbox.width / 2, head_textbox.height / 2);
-  //   title.interactive = true;
-  //   title.buttonMode = true;
-  //   title.on("pointerup", event => {
-  //     {
-  //       title_pointerup();
-  //     }
-  //   });
-  //   head_textbox.addChild(title);
-  //   head_textbox.visible = true;
-  //   head_textbox.angle = 360;
-  //   $("#t").text("");
-  //   app.stage.addChild(head_textbox);
-  // },
 
   head_text: function () {
     $("#t").text("loading....");
@@ -198,33 +176,33 @@ var game_stage = {
   tile_num: 3,
   image_num: 0,
   tile_size: pSize / 4,
-  tile_imagefilename: "0/p_img/004.json",
+  tile_imageFilename: "0/p_img/004.json",
   o_tile: "",
   blank: {},
   tiles: [],
   start: function () {
     this.tile_size = pSize / this.tile_num;
     select_mode = false;
-    this.tile_imagefilename =
+    this.tile_imageFilename =
       "img/photoPuzzle/" +
       this.folder_num +
       "/0" +
       this.image_num +
       this.tile_num;
-    if (resource_check(this.tile_imagefilename)) {
+    if (resource_check(this.tile_imageFilename)) {
       loader
-        .add(this.tile_imagefilename, this.tile_imagefilename + ".json")
+        .add(this.tile_imageFilename, this.tile_imageFilename + ".json")
         .load(this.setup_game);
     } else {
       this.setup_game();
     }
   },
   setup_game: function () {
-    console.log(game_stage.tile_imagefilename);
+    console.log(game_stage.tile_imageFilename);
     click_num = 0;
     game_time = new Date();
     let index = 0;
-    let id = resources[game_stage.tile_imagefilename].textures;
+    let id = resources[game_stage.tile_imageFilename].textures;
     let ts = game_stage.tile_size;
     for (let y = 0; y < game_stage.tile_num; y++) {
       for (let x = 0; x < game_stage.tile_num; x++) {
@@ -247,8 +225,8 @@ var game_stage = {
         s.tile.on("pointerup", (event) => {
           s.pointerup();
         });
-        s.tile.xgoal = s.tile.x;
-        s.tile.ygoal = s.tile.y;
+        s.tile.xGoal = s.tile.x;
+        s.tile.yGoal = s.tile.y;
         s.tile.move_on = false;
         s.tile.direction = "";
         app.stage.addChild(s.tile);
@@ -365,41 +343,35 @@ var center_board = {
       this.c_board.addChild(click);
       let now_time = new Date();
       total_second = Math.floor((now_time - game_time) / 1000);
-      let time = new Text("Time: " + timestring(total_second), style2);
+      let time = new Text("Time: " + timeString(total_second), style2);
       time.anchor.set(0.5, 0.5);
       click.position.set(0, pSize / 4.7);
       this.c_board.addChild(time);
       // 최고 기록인지 확인 후 이름 입력
-      $.post("/photopuzzle", { request: "yes" }, function (result, data) {
-        console.log("result :", result, data);
-        record = {};
-        record = result;
-        userlevel = game_stage.tile_num + "x" + game_stage.tile_num;
-        let o_score = parseInt(record[userlevel].score);
-        let n_score =
-          game_stage.tile_num * 10000 - total_second - click_num * 2;
-        if (n_score > o_score) {
-          document.getElementById("id01").style.display = "block";
-          $("#level").text(userlevel + " New Record!!");
-          document.getElementById("level").style.fontSize = pSize / 15 + "px";
-          document.getElementById("nameinput").style.fontSize =
-            pSize / 20 + "px";
-          document.getElementById("submit").style.fontSize = pSize / 20 + "px";
-          record[userlevel].click = click_num;
-          record[userlevel].time = timestring(total_second);
-          console.log("total_second :", total_second);
-          record[userlevel].score = n_score;
-          $("#submit").on("click", function () {
-            let username = $("#nameinput").val();
-            record[userlevel].name = username;
-            $.post("/photopuzzle", record, function (result, data) {
-              console.log("data :", result, data);
-              best_record_show();
-            });
-            document.getElementById("id01").style.display = "none";
-          });
-        }
-      });
+
+      userLevel = game_stage.tile_num + "x" + game_stage.tile_num;
+      let o_score = parseInt(bestRecords[userLevel].score);
+      let n_score = game_stage.tile_num * 10000 - total_second - click_num * 2;
+      if (n_score > o_score) {
+        document.getElementById("id01").style.display = "block";
+        $("#level").text(userLevel + " New Record!!");
+        document.getElementById("level").style.fontSize = pSize / 15 + "px";
+        document.getElementById("name_input").style.fontSize =
+          pSize / 20 + "px";
+        document.getElementById("submit").style.fontSize = pSize / 20 + "px";
+        bestRecords[userLevel].click = click_num;
+        bestRecords[userLevel].time = timeString(total_second);
+        console.log("total_second :", total_second);
+        bestRecords[userLevel].score = n_score;
+        $("#submit").on("click", function () {
+          let username = $("#name_input").val();
+          bestRecords[userLevel].name = username;
+          save_best_record();
+          best_record_show();
+          document.getElementById("id01").style.display = "none";
+        });
+      }
+      // });
     } else {
       level_select_board_on = true;
       select_stage.hide_i();
@@ -510,30 +482,30 @@ function tile_draw() {
       switch (tile.direction) {
         case LEFT:
           tile.x -= V;
-          if (tile.x <= tile.xgoal || random_proceed) {
+          if (tile.x <= tile.xGoal || random_proceed) {
             tile.move_on = false;
-            tile.x = tile.xgoal;
+            tile.x = tile.xGoal;
           }
           break;
         case RIGHT:
           tile.x += V;
-          if (tile.x >= tile.xgoal || random_proceed) {
+          if (tile.x >= tile.xGoal || random_proceed) {
             tile.move_on = false;
-            tile.x = tile.xgoal;
+            tile.x = tile.xGoal;
           }
           break;
         case UP:
           tile.y -= V;
-          if (tile.y <= tile.ygoal || random_proceed) {
+          if (tile.y <= tile.yGoal || random_proceed) {
             tile.move_on = false;
-            tile.y = tile.ygoal;
+            tile.y = tile.yGoal;
           }
           break;
         case DOWN:
           tile.y += V;
-          if (tile.y >= tile.ygoal || random_proceed) {
+          if (tile.y >= tile.yGoal || random_proceed) {
             tile.move_on = false;
-            tile.y = tile.ygoal;
+            tile.y = tile.yGoal;
           }
           break;
       }
@@ -586,23 +558,49 @@ function title_pointerup() {
     select_stage.start();
   }
 }
-function best_record_show() {
-  $.post("/photopuzzle", { request: "yes" }, function (result, data) {
+
+function save_best_record() {
+  localStorage.setItem("bestRecords", JSON.stringify(bestRecords));
+}
+function load_best_record() {
+  const bestRecords_original = {
+    "3x3": { name: "장민", score: 29000, click: 10, time: "00:30" },
+    "4x4": { name: "장민", score: 38000, click: 200, time: "01:00" },
+    "5x5": { name: "장민", score: 45000, click: 300, time: "02:00" },
+    "6x6": { name: "장민", score: 52000, click: 400, time: "03:00" },
+    "7x7": { name: "장민", score: 60000, click: 500, time: "04:00" },
+    "8x8": { name: "장민", score: 70000, click: 600, time: "05:00" },
+  };
+  let loaded_data = JSON.parse(localStorage.getItem("bestRecords"));
+  try {
     for (let i = 3; i < 9; i++) {
-      $("#t" + i + 0).text(result[i + "x" + i].name);
-      $("#t" + i + 1).text(result[i + "x" + i].score);
-      $("#t" + i + 2).text(result[i + "x" + i].click);
-      $("#t" + i + 3).text(result[i + "x" + i].time);
+      bestRecords[i + "x" + i].name = loaded_data[i + "x" + i].name;
+      bestRecords[i + "x" + i].score = loaded_data[i + "x" + i].score;
+      bestRecords[i + "x" + i].click = loaded_data[i + "x" + i].click;
+      bestRecords[i + "x" + i].time = loaded_data[i + "x" + i].time;
     }
-    document.getElementById("bestrecord").style.fontSize = pSize / 15 + "px";
-    document.getElementById("id02").style.display = "block";
-    $("#id02").on("click", function () {
-      document.getElementById("id02").style.display = "none";
-    });
+  } catch (e) {
+    console.log("No saved best records");
+    return bestRecords_original;
+  }
+  return loaded_data;
+}
+
+function best_record_show() {
+  for (let i = 3; i < 9; i++) {
+    $("#t" + i + 0).text(bestRecords[i + "x" + i].name);
+    $("#t" + i + 1).text(bestRecords[i + "x" + i].score);
+    $("#t" + i + 2).text(bestRecords[i + "x" + i].click);
+    $("#t" + i + 3).text(bestRecords[i + "x" + i].time);
+  }
+  document.getElementById("best_record").style.fontSize = pSize / 15 + "px";
+  document.getElementById("id02").style.display = "block";
+  $("#id02").on("click", function () {
+    document.getElementById("id02").style.display = "none";
   });
 }
 
-function timestring(seconds) {
+function timeString(seconds) {
   let t_s = parseInt(seconds);
   let m = t_s / 60 < 10 ? "0" + Math.floor(t_s / 60) : Math.floor(t_s / 60);
   let s = t_s % 60 < 10 ? "0" + Math.floor(t_s % 60) : Math.floor(t_s % 60);
@@ -638,8 +636,8 @@ function tile_p_change(tile, x, y, direction) {
   tile.move_on = true;
   tile.px += x;
   tile.py += y;
-  tile.xgoal = ts * tile.px + ts / 2;
-  tile.ygoal = ts * tile.py + ts / 2 + margin;
+  tile.xGoal = ts * tile.px + ts / 2;
+  tile.yGoal = ts * tile.py + ts / 2 + margin;
 }
 function resource_check(filename) {
   if (load_resource.indexOf(filename) == -1) {
