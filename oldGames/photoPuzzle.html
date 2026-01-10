@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>PHOTO PUZZLE</title>
+    <meta charset="utf-8" name="viewport" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Clicker Script"
+      rel="stylesheet"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://pixijs.download/v5.1.5/pixi.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/photoPuzzle.css" />
+  </head>
+  <body>
+    <span id="t">loading</span>
+    <script type="text/javascript">
+      let type = "WebGL";
+      if (!PIXI.utils.isWebGLSupported()) {
+        type = "canvas";
+        PIXI.utils.sayHello(type);
+      }
+    </script>
+    <script src="js/photoPuzzle.js" charset="utf-8"></script>
+    <div id="id01" class="modal">
+      <form class="modal-content animate">
+        <div class="imgcontainer">
+          <span
+            onclick="document.getElementById('id01').style.display='none'"
+            class="close"
+            title="Close Modal"
+            >&times;</span
+          >
+        </div>
+        <div class="container">
+          <div id="contents">
+            <span id="level">4 x 4 New Record!!</span><br />
+          </div>
+          <label for="uname">your name:</label>
+          <input
+            id="nameinput"
+            type="text"
+            placeholder=""
+            name="uname"
+            required
+          />
+          <button id="submit" type="button">submit</button>
+        </div>
+      </form>
+    </div>
+    <div id="id02" class="modal">
+      <form class="modal-content animate">
+        <p id="bestrecord">Best Records</p>
+        <table>
+          <tr>
+            <th>Level</th>
+            <th>Name</th>
+            <th>Score</th>
+            <th>Click</th>
+            <th>Time</th>
+          </tr>
+          <tr>
+            <td>3x3</td>
+            <td id="t30">Name</td>
+            <td id="t31">Score</td>
+            <td id="t32">Click</td>
+            <td id="t33">Time</td>
+          </tr>
+          <tr>
+            <td>4x4</td>
+            <td id="t40">Name</td>
+            <td id="t41">Score</td>
+            <td id="t42">Click</td>
+            <td id="t43">Time</td>
+          </tr>
+          <tr>
+            <td>5x5</td>
+            <td id="t50">Name</td>
+            <td id="t51">Score</td>
+            <td id="t52">Click</td>
+            <td id="t53">Time</td>
+          </tr>
+          <tr>
+            <td>6x6</td>
+            <td id="t60">Name</td>
+            <td id="t61">Score</td>
+            <td id="t62">Click</td>
+            <td id="t63">Time</td>
+          </tr>
+          <tr>
+            <td>7x7</td>
+            <td id="t70">Name</td>
+            <td id="t71">Score</td>
+            <td id="t72">Click</td>
+            <td id="t73">Time</td>
+          </tr>
+          <tr>
+            <td>8x8</td>
+            <td id="t80">Name</td>
+            <td id="t81">Score</td>
+            <td id="t82">Click</td>
+            <td id="t83">Time</td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </body>
+</html>

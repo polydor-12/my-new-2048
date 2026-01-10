@@ -37,7 +37,18 @@ var model = "mobile";
 var mobile_os = "";
 var iOS_ending = false;
 const record_name = "tetris_best_scores";
-
+const defaultData = {
+  no0p: "장민",
+  no0s: "1500",
+  no1p: "양정원",
+  no1s: "1000",
+  no2p: "이석희",
+  no2s: "900",
+  no3p: "장지혜",
+  no3s: "800",
+  no4p: "장민",
+  no4s: "780",
+};
 // 변수선언
 var score = 0;
 var level = 1;
@@ -544,21 +555,10 @@ function readRecordFromStorage(key) {
 }
 
 // 초기값 세팅: 기록이 없으면 기본값을 넣음
-function ensureDefaultRecord() {
-  if (readRecordFromStorage(record_name) === null) {
+function ensureDefaultRecord(restart = false) {
+  if (readRecordFromStorage(record_name) === null || restart) {
     // 기본값 예시: 5명(이름 점수 * 5). 필요에 맞게 수정하세요.
-    const defaultData = {
-      no0p: "장민",
-      no0s: "1500",
-      no1p: "양정원",
-      no1s: "1000",
-      no2p: "이석희",
-      no2s: "900",
-      no3p: "장지혜",
-      no3s: "800",
-      no4p: "장민",
-      no4s: "780",
-    };
+
     localStorage.setItem(record_name, JSON.stringify(defaultData));
   }
 }
@@ -566,14 +566,17 @@ function ensureDefaultRecord() {
 // 화면에 기록을 채우는 함수 (원래 best_record_write의 역할)
 function best_record_write() {
   // 로컬 스토리지에서 읽어오기 전에 기본값 보장
-  ensureDefaultRecord(record_name);
+  ensureDefaultRecord();
 
   const bestScoreRecord = JSON.parse(localStorage.getItem(record_name));
-
-  Object.keys(bestScoreRecord).forEach((key) => {
-    console.log(key, bestScoreRecord[key]);
-    document.getElementById(key).innerHTML = bestScoreRecord[key];
-  });
+  try {
+    Object.keys(bestScoreRecord).forEach((key) => {
+      document.getElementById(key).innerHTML = bestScoreRecord[key];
+    });
+  } catch (err) {
+    console.log(err);
+    ensureDefaultRecord(true);
+  }
   console.log("기록 불러와서 홈페이지에 게시됨");
 }
 
@@ -1087,6 +1090,7 @@ function score_to_server() {
   let scores = [];
   let names = [];
   let first_time = true;
+  let save_file = {};
   for (let x = 0; x < 5; x++) {
     // 점수가 순위에 들었는지 봄
     if (
@@ -1106,8 +1110,6 @@ function score_to_server() {
   }
   if (first_time == false) {
     // 순위에 드는 경우
-    let save_file = {};
-    save_file["model"] = model; // model - 모바일 인지 pc 인지 입력
     for (let x = 0; x < 5; x++) {
       // 새로운 순위 쓰기
       document.getElementById("no" + x + "p").innerHTML = names[x];
@@ -1119,9 +1121,8 @@ function score_to_server() {
         "no" + x + "s"
       ).innerHTML; // 서버에 보낼 자료 만듬
     }
-
-    localStorage.setItem(record_name, JSON.stringify(save_file));
   }
+  localStorage.setItem(record_name, JSON.stringify(save_file));
 }
 function fill_div(id, width_num, height_num, margin) {
   let w_margin = 0;
