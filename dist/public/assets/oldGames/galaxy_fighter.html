@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Galaxy Explorer</title>
+    <meta charset="utf-8" name="viewport" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- <script src="https://pixijs.download/v5.1.5/pixi.min.js"></script> -->
+    <script src="js/pixi.min.js"></script>
+    <script src="js/pixi-sound.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/galaxy_fighter.css" />
+  </head>
+  <body>
+    <h1></h1>
+    <h1></h1>
+    <h1>LOADING NOW</h1>
+    <h1></h1>
+    <h1></h1>
+    <script type="text/javascript">
+      let type = "WebGL";
+      if (!PIXI.utils.isWebGLSupported()) {
+        type = "canvas";
+        PIXI.utils.sayHello(type);
+      }
+    </script>
+
+    <script src="js/galaxy_fighter.js" charset="utf-8"></script>
+    <script></script>
+  </body>
+</html>
