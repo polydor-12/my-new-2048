@@ -1192,6 +1192,9 @@ function endingboard_show() {
     b01();
   }
 }
+function dataWrite(key, data) {
+  localStorage.setItem(key, JSON.stringify(data));
+}
 function server_record_write() {
   $("#head_board").slideUp("slow");
   $("#input_name").hide();
@@ -1210,7 +1213,8 @@ function server_record_write() {
           $(x).text(score_ob[x]);
         }
       }
-      $.post("/sudoku", score_ob);
+      // $.post("/sudoku", score_ob);
+      dataWrite("sudoku_score", score_ob);
     } else {
       $("#input_name").after("<h5>취소되었습니다!</h5>");
     }
@@ -1400,13 +1404,16 @@ function save_click() {
     save_file["c" + i] = [t_v, cell[i].u_value, cell[i].research, guess_arr];
   }
   if (name != "") {
-    $.post("/sudoku", save_file, function (result) {
-      if (result) {
-        $("#alert_save").html("<br><h5>저장되었습니다!</h5>");
-      } else {
-        $("#alert_save").html("<br><h5>저장에 문제가 발생하였습니다!</h5>");
-      }
-    });
+    console.log("save: " + name, save_file);
+    dataWrite(name, save_file);
+
+    // $.post("/sudoku", save_file, function (result) {
+    if (result) {
+      $("#alert_save").html("<br><h5>저장되었습니다!</h5>");
+    } else {
+      $("#alert_save").html("<br><h5>저장에 문제가 발생하였습니다!</h5>");
+    }
+    // });
   } else {
     $("#alert_save").html("<br><h5>취소되었습니다!</h5>");
   }
@@ -1442,14 +1449,16 @@ function load_file() {
 function load_click() {
   let name = $("#load_name").val();
   if (name != "") {
-    $.post("/sudoku", { loadname: name }, function (result) {
-      if (result.savename == name) {
-        load_cell_write(result);
-        $("#alert_load").html("<br><h5>불러왔습니다!</h5>");
-      } else {
-        $("#alert_load").html("<br><h5>불러오는데 문제가 발생하였습니다!</h5>");
-      }
-    });
+    // $.post("/sudoku", { loadname: name }, function (result) {
+    let result = JSON.parse(localStorage.getItem(name));
+    console.log("load: " + name, result);
+    if (result != null) {
+      load_cell_write(result);
+      $("#alert_load").html("<br><h5>불러왔습니다!</h5>");
+    } else {
+      $("#alert_load").html("<br><h5>불러오는데 문제가 발생하였습니다!</h5>");
+    }
+    // });
   } else {
     $("#alert_load").html("<br><h5>취소되었습니다!</h5>");
   }
