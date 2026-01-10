@@ -1268,17 +1268,19 @@ function ending() {
 }
 
 function best_record_write() {
-  let st = ["_n", "_s", "_t", "_w"];
-  let index = 0;
-  $("#No1_n").load("/record/sudokurecord.txt", function (res, sta) {
-    let string = $("#No1_n").text().split(" ");
+  const load_data = JSON.parse(localStorage.getItem("sudoku_score"));
+  if (load_data != null) {
+    score_ob = load_data;
     for (let i = 1; i < 6; i++) {
-      for (let n = 0; n < 4; n++) {
-        $("#No" + i + st[n]).text(string[index]);
-        index++;
+      // record 화면에 기록
+      for (x in score_ob) {
+        if (score_ob[x] == "무명") {
+          score_ob[x] = name;
+        }
+        $(x).text(score_ob[x]);
       }
     }
-  });
+  }
 }
 
 function main_board_all_slideUp() {
