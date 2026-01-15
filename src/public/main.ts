@@ -190,7 +190,8 @@ function resetBoardKeySet() {
 function autoPlayKeySet() {
   const secondRowText = document.getElementById("secondRowText");
   if (secondRowText) {
-    secondRowText.addEventListener("click", () => {
+    secondRowText.addEventListener("click", (e: Event) => {
+      e.preventDefault();
       if (board.autoPlay) {
         board.autoPlayStop();
       } else {
