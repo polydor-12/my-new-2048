@@ -1,19 +1,31 @@
-﻿var filter = "win16|win32|win64|mac|macintel";
-function pc_or_mobile() {
-  var mode = "";
-  if (navigator.platform) {
-    if (filter.indexOf(navigator.platform.toLowerCase()) < 0) {
-      mode = "mobile";
-    } else {
-      //pc alert('pc 접속'); }
-      mode = "pc";
-    }
-  }
-  return mode;
+﻿export function mobileNow() {
+  var userAgent = (navigator.userAgent || "").toLowerCase();
+  var mobileKeywords = [
+    /iphone/i,
+    /ipad/i,
+    /ipod/i,
+    /android/i,
+    /blackberry/i,
+    /windows phone/i,
+  ];
+
+  var isMobileUA = mobileKeywords.some(function (keyword) {
+    return userAgent.match(keyword);
+  });
+
+  var platform = (navigator.platform || "").toLowerCase();
+  var desktopTokens = ["win16", "win32", "win64", "mac", "macintel", "linux"];
+
+  var isDesktopPlatform = desktopTokens.some(function (t) {
+    return platform.indexOf(t) !== -1;
+    // 또는: return platform.includes(t);
+  });
+
+  return !!(isMobileUA && !isDesktopPlatform);
 }
 
 $(document).ready(function () {
-  if (pc_or_mobile() == "pc") {
+  if (!mobileNow()) {
     var x = $(window).width();
     if (x > 1000) {
       x = 700;
