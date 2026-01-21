@@ -1,4 +1,4 @@
-﻿export function mobileNow() {
+﻿function mobileNow() {
   var userAgent = (navigator.userAgent || "").toLowerCase();
   var mobileKeywords = [
     /iphone/i,
